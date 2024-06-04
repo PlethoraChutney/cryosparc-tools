@@ -1287,7 +1287,7 @@ class ExternalJob(Job):
         Args:
             type (Datatype): cryo-EM datatype for this output, e.g., "particle"
             name (str, optional): Output name key, e.g., "selected_particles".
-                Same as ``type`` if not specified. Defaults to None.
+                Same as ``type`` if not specified. Cannot contain spaces or periods. Defaults to None.
             slots (list[SlotSpec], optional): List of slot expected to be
                 created for this output, such as ``location`` or ``blob``. Do
                 not specify any slots that were passed through from an input
@@ -1351,6 +1351,7 @@ class ExternalJob(Job):
             ... )
             "particle_alignments"
         """
+        assert "." not in name, "Output name cannot contain periods."
         try:
             self.cs.vis.add_external_job_output(  # type: ignore
                 project_uid=self.project_uid,

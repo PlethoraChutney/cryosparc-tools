@@ -259,7 +259,7 @@ class Project(MongoController[ProjectDocument]):
             dataset (Dataset): Result dataset.
             type (Datatype): Type of output dataset.
             name (str, optional): Name of output on created External job. Same
-                as type if unspecified. Defaults to None.
+                as type if unspecified. Cannot contain spaces or periods. Defaults to None.
             slots (list[SlotSpec], optional): List of slots expected to
                 be created for this output such as ``location`` or ``blob``. Do
                 not specify any slots that were passed through from an input
@@ -275,6 +275,7 @@ class Project(MongoController[ProjectDocument]):
         Returns:
             str: UID of created job where this output was saved
         """
+        assert "." not in name, "Output name cannot contain periods."
         return self.cs.save_external_result(
             self.uid,
             workspace_uid,
